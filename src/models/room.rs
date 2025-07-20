@@ -1,7 +1,27 @@
+use serde::{Deserialize, Serialize};
 use std::{collections::HashMap, sync::Arc};
 use tokio::sync::{Mutex, mpsc::UnboundedSender};
 
-use crate::types::{MessageSender, SignalingMessage};
+//this is dirty so to do refactor it
+pub type MessageSender = UnboundedSender<SignalingMessage>;
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+#[serde(tag = "type", content = "data")]
+pub enum SignalingMessage {
+    #[serde(rename = "disconnect")]
+    Disconnect { client_id: String },
+    #[serde(rename = "offer")]
+    Offer { client_id: String, sdp: String },
+    #[serde(rename = "answer")]
+    Answer { client_id: String, sdp: String },
+    #[serde(rename = "ice_candidate")]
+    IceCandidate {
+        client_id: String,
+        candidate: String,
+    },
+    #[serde(rename = "join")]
+    Join { client_id: String },
+}
 
 #[derive(Debug, Clone)]
 pub struct Room {

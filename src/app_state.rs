@@ -1,11 +1,9 @@
-use crate::Room;
+use crate::models::Room;
 use rand::{Rng, distr::Alphanumeric};
 use std::{collections::HashMap, sync::Arc};
 use tokio::sync::Mutex;
 
-
-
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct AppState {
     pub rooms: Arc<Mutex<HashMap<String, Room>>>,
 }
